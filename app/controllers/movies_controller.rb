@@ -10,19 +10,28 @@ class MoviesController < ApplicationController
     #possible ratings
     @all_ratings = Movie.all_ratings
 
-    #Which ratings to show? 
-    @ratings_to_show =
-      if params[:ratings].present?
-        params[:ratings].keys
-      else
-        @all_ratings
-      end
 
-    #display movies 
+    if params[:ratings].present?
+      @ratings_to_show = params[:ratings].keys
+    else
+      @ratings_to_show = @all_ratings
+    end
+
+    @sort_by = params[:sort_by]
+
     @movies = Movie.with_ratings(@ratings_to_show)
+
+
+    if @sort_by
+      @movies = @movies.order(@sort_by)
+    end
     
 
   end
+
+
+
+
 
   def new
     # default: render 'new' template
